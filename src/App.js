@@ -1,10 +1,10 @@
 import {Component} from 'react'
-import { BrowserRouter,Routes,Route } from 'react-router-dom'
+import { BrowserRouter,Switch,Route} from "react-router-dom"
 import Home from './components/Home'
 import Jobs from './components/Jobs'
 import Login from './components/Login'
 import NotFound from './components/NotFound'
-import Header  from './components/Header'
+import JobItemDetails from './components/JobItemDetails'
 import './App.css'
 
 const employmentTypesList = [
@@ -48,17 +48,15 @@ const salaryRangesList = [
 class App extends Component {
   render(){
     return (
-    <div className='app'>
       <BrowserRouter>
-        <Routes>
-          <Route element={<Header/>}/>
-          <Route exact path='/login' element={<Login/>}/>
-          <Route exact path='/' element={<Home/>} employmentType ={employmentTypesList}/>
-          <Route exact path='/jobs' element={<Jobs/>}/>
-          <Route exact path='/not-found' element={<NotFound/>}/>
-        </Routes>
+        <Switch>
+          <Route exact path='/login' component={Login}/>
+          <Route exact path='/' component={Home}/>
+          <Route exact path='/jobs' component={Jobs}/>
+          <Route exact path='/jobs/:id' component={JobItemDetails} />
+          <Route component={NotFound}/>
+        </Switch>
       </BrowserRouter>
-    </div>
     )
   }
 }

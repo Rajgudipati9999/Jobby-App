@@ -1,142 +1,150 @@
-import {Component} from 'react'
-// import {WithRouter} from 'react-router-dom'
-import Cookies from 'js-cookie'
-import { Navigate } from 'react-router-dom'
-import './index.css'
+import React, { useState } from 'react';
+// import {useHistory} from 'react-router-dom'
+import Cookies from 'js-cookie';
+// import { withRouter } from 'react-router-dom';
+import './index.css';
 
-class Login extends Component {
-  state = {
-    username: '',
-    password: '',
-    error_user: '',
-    error_password: '',
-    isAuthenticated : false ,
-    credentialsError : '',
-  }
-
-  handleUsernameError = event => {
+const Login = (props) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorUser, setErrorUser] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isFetching,setIsFetching] = useState(false);
+  const [credentialsError, setCredentialsError] = useState('');
+  // const history = useHistory()
+  // const token = Cookies.get('jwt_token')
+  const handleUsernameError = (event) => {
     if (event.target.value === '') {
-      this.setState({ error_user: 'Required' });
+      setErrorUser('Required');
     } else {
-      this.setState({ error_user: '' });
+      setErrorUser('');
     }
-  }
-
-  handlePasswordError = event => {
+  };
+  const handlePasswordError = (event) => {
     if (event.target.value === '') {
-      this.setState({ error_password: 'Required' });
+      setErrorPassword('Required');
     } else {
-      this.setState({ error_password: '' });
+      setErrorPassword('');
     }
- }
+  };
 
-
-  handleUsernameChange = event => {
+  const handleUsernameChange = (event) => {
     const { value } = event.target;
-    this.setState({ username: value });
+    setUsername(value);
 
     if (value !== '') {
-      this.setState({ error_user: '' });
+      setErrorUser('');
     }
-  }
+  };
 
-  handlePasswordChange = event => {
+  const handlePasswordChange = (event) => {
     const { value } = event.target;
-    this.setState({ password: value });
+    setPassword(value);
 
     if (value !== '') {
-      this.setState({ error_password: '' });
+      setErrorPassword('');
     }
-  }
+  };
 
-  handleSubmit = async (event) => {
-    event.preventDefault()
-    const { username, password } = this.state;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // setIsFetching(true)
     if (username === '') {
-      this.setState({ error_user: 'Required' });
+      setErrorUser('Required');
     }
     if (password === '') {
-      this.setState({ error_password: 'Required' });
+      setErrorPassword('Required');
     }
 
-    const url = 'https://apis.ccbp.in/login'
-    const data = {username,password}
-    const options = {
-      method : 'POST',
-      body : JSON.stringify(data)
+    if (username !== '' && password !== '') {
+      const url = '/login';
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      };
+      try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        if (response.ok) {
+          Cookies.set('jwt_token', data.jwt_token, { expires: 30 });
+          setIsAuthenticated(true);
+          // console.log(props)
+          const {history} = props
+          history.push('/')
+          // setIsFetching(true)
+        } else {
+          setCredentialsError('username or password did not match');
+          // setIsFetching(true)
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        setCredentialsError('Something went wrong. Please try again.');
+      }
     }
-    const response = await fetch(url,options)
-    if (response.ok === true){
-      this.setState({isAuthenticated : true})
-      const jwt_token = 'v87653%%%vcvdbdfdfvd'
-      Cookies.set('jwt_token' , jwt_token)
-     // this.setState({jwt_token : jwt_token})
-    }else{
-      if (username === "" && password === ""){
-        this.setState({credentialsError : 'Please Enter Username and Password'})
-    }else {
-      this.setState({credentialsError : '*username and password did not match'})
-    }
-    }
-  }
-  render() {
-    const {error_user,error_password,isAuthenticated,credentialsError,jwt_token} = this.state 
-    // console.log(jwt_token);
-    if (isAuthenticated){
-      return <Navigate to='/'/>
-    }
-    return (
-      <div className="bg-container">
-        <form onSubmit={this.handleSubmit} className="form-container">
-            <img
-              src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
-              alt="website logo"
-              className="website-logo"
-            />
-          <div className="input-container">
-            <label htmlFor="username" className="label">
-              USERNAME
-            </label>
-            <br />
-            <input
-              type="text"
-              id="username"
-              value={this.state.username}
-              onChange={this.handleUsernameChange}
-              onBlur={this.handleUsernameError}
-              className="input"
-              placeholder="Username"
-            />
-            <br/>
-            <span className='error-msg'>{error_user}</span>
-          </div>
-          <div>
-            <label htmlFor="password" className="label">
-              PASSWORD
-            </label>
-            <br />
-            <input
-              type="password"
-              id="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
-              onBlur={this.handlePasswordError}
-              className="input"
-              placeholder="Password"
-            />
-            <br/>
-            <span className='error-msg'>{error_password}</span>
-          </div>
-          <div>
-            <button type="submit" className="button">
-              Login
-            </button>
-          </div>
-          <p className='error-msg'>{credentialsError}</p>
-        </form>
-      </div>
-    )
-  }
-}
+  };
 
-export default Login 
+ /* if (isAuthenticated) {
+    const AccessToken = Cookies.get('jwt_token')
+    if (AccessToken.length !== 0) {
+        return <Navigate to='/' />
+    }
+  } */ 
+  return (
+    <div className="bg-container">
+      <form onSubmit={handleSubmit} className="form-container">
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+          alt="website logo"
+          className="website-logo"
+        />
+        <div>
+          <label htmlFor="username" className="label">
+            USERNAME
+          </label>
+          <br/>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={handleUsernameChange}
+            onBlur={handleUsernameError}
+            className="input"
+            placeholder="Username"
+          />
+          <br/>
+          <span className='error-msg'>{errorUser}</span>
+        </div>
+        <div>
+          <label htmlFor="password" className="label">
+            PASSWORD
+          </label>
+          <br/>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            onBlur={handlePasswordError}
+            className="input"
+            placeholder="Password"
+          />
+          <br/>
+          <span className='error-msg'>{errorPassword}</span>
+        </div>
+        <div>
+          <button type="submit" className="button">
+            Login
+          </button>
+        </div>
+        <p className='error-msg'>{credentialsError}</p>
+      </form>
+    </div>
+  );
+};
+
+export default Login;

@@ -5,12 +5,21 @@
     background-color: #333;
     color: white;
     width: 100vw;
+    font-family: 'Roboto';
+    font-size: 18px;
   }
   .website-logo {
-    min-height: 50px;
-    min-width: 120px;
+    min-height: 40px;
+    max-height: 40px;
+    min-width: 100px;
+    max-width: 100px;
     margin-left: 10px;
     padding-top: 30px;
+  }
+  .website-logo-button {
+    background-color: transparent;
+    outline: none;
+    border-width: 0;
   }
   .logo{
     align-self: center;
@@ -35,8 +44,12 @@
   .sm-display {
     display: none;
   }
-  .icon {
-    font-size: 40px;
+  .icon{
+    font-size: 45px;
+    color: #fff;
+  }
+  .link:hover{
+    color: #4f46e5;
   }
   @media screen and (max-width: 767px) {
     .sm-display {

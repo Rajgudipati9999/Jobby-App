@@ -1,0 +1,60 @@
+.anchor {
+    display: block;
+    color: #fff;
+}
+.website-url-container {
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.skill-list-container {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 600px;
+}
+.skill {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.skill-logo {
+    height: 50px;
+    width: 50px;
+}
+.skill-name {
+    margin-left: 10px;
+    
+}
+.life-at-company-title {
+    font-size: 22px;
+    font-weight: bold;
+}
+.company-details {
+    margin-top: 40px;
+}
+.life-at-company-image {
+    height: 200px;
+    width: 200px;
+}
+.life-at-company-container {
+    display: flex;
+    justify-content: space-between;
+}
+@media screen and (max-width : 1200px) {
+    .life-at-company-container {
+        flex-direction: column;
+    }
+}
+@media screen and (max-width : 768px) {
+    .skill-list-container {
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+}
+.c-company-location {
+    
+}

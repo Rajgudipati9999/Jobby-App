@@ -1,0 +1,28 @@
+.job-item-details-container {
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+.similar-jobs-list {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.loader-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+@media screen and (max-width : 768px) {
+    .similar-jobs-list {
+        flex-direction: column;
+    }
+}
+.similar-jobs-heading {
+    color: #ddd;
+}
